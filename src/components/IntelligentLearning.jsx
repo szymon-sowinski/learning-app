@@ -6,6 +6,7 @@ export default function IntelligentLearning({ setMode }) {
   const [showAnswer, setShowAnswer] = useState(false);
   const [guessedAnswer, setGuessedAnswer] = useState("");
   const [wordScores, setWordScores] = useState({});
+  const [showCorrectPopup, setShowCorrectPopup] = useState(false);
 
   useEffect(() => {
     const scores = {};
@@ -53,8 +54,16 @@ export default function IntelligentLearning({ setMode }) {
 
   if (!currentWord) return null;
 
+  const checkAnswer = () => {
+    if (guessedAnswer.trim().toLowerCase() === currentWord[0].toLowerCase()) {
+      setShowCorrectPopup(true);
+      setTimeout(() => setShowCorrectPopup(false), 1500);
+    }
+    setShowAnswer(true);
+  };
+
   return (
-    <div id="app">
+    <div id="app" style={{ position: 'relative' }}>
       <h2>🤖 Tryb inteligentny</h2>
 
       <div className="word">Polskie słowo: {currentWord[1]}</div>
@@ -67,12 +76,7 @@ export default function IntelligentLearning({ setMode }) {
             value={guessedAnswer}
             onChange={(e) => setGuessedAnswer(e.target.value)}
           />
-          <button onClick={() => {
-            if (guessedAnswer.trim().toLowerCase() === currentWord[0].toLowerCase()) {
-              alert("✔ Poprawna odpowiedź!");
-            }
-            setShowAnswer(true);
-          }}>Pokaż odpowiedź</button>
+          <button onClick={checkAnswer}>Pokaż odpowiedź</button>
         </>
       ) : (
         <>
@@ -83,13 +87,29 @@ export default function IntelligentLearning({ setMode }) {
             <button onClick={() => handleDifficulty("średnie")} style={{ marginRight: '5px' }}>Średnie</button>
             <button onClick={() => handleDifficulty("trudne")} style={{ marginRight: '5px' }}>Trudne</button>
           </div>
-          <div style={{ marginTop: '15px' }}>
-            <button onClick={randomWord} style={{ backgroundColor: '#4CAF50', color: 'white', padding: '8px 16px', border: 'none', borderRadius: '5px', cursor: 'pointer' }}>Dalej →</button>
-          </div>
         </>
       )}
 
       <button className="back" onClick={() => setMode("menu")}>⏪ Menu</button>
+
+      {showCorrectPopup && (
+        <div style={{
+          position: "absolute",
+          top: "-70px",
+          left: "50%",
+          transform: "translateX(-50%)",
+          backgroundColor: "#4CAF50",
+          color: "white",
+          padding: "10px 16px",
+          borderRadius: "8px",
+          boxShadow: "0 4px 8px rgba(0,0,0,0.2)",
+          zIndex: 1000,
+          transition: "opacity 0.5s ease-in-out",
+          opacity: 1
+        }}>
+          ✔ Poprawna odpowiedź!
+        </div>
+      )}
     </div>
   );
 }
