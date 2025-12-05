@@ -1,34 +1,34 @@
 import { useEffect, useState } from "react";
 
-export default function Difficult({ currentWord, setCurrentWord, difficult, setDifficult, setMode, randomWord }) {
+export default function Difficult({ currentWord, setCurrentWord, difficult, setDifficult, setMode }) {
   const [index, setIndex] = useState(0);
   const [showPopup, setShowPopup] = useState(false);
 
   useEffect(() => {
-    if (difficult.length > 0 && !currentWord) {
-      setCurrentWord([difficult[0], ""]);
+    if (difficult.length > 0) {
+      setCurrentWord(difficult[index]);
+    } else {
+      setCurrentWord(null);
     }
-  }, [difficult, currentWord, setCurrentWord]);
+  }, [difficult, index, setCurrentWord]);
 
   const nextWord = () => {
     if (difficult.length === 0) return;
-    const nextIndex = (index + 1) % difficult.length;
-    setIndex(nextIndex);
-    setCurrentWord([difficult[nextIndex], ""]);
+    setIndex((prev) => (prev + 1) % difficult.length);
   };
 
   const removeDifficult = () => {
-    const newDifficult = difficult.filter(word => word !== currentWord[0]);
+    if (!currentWord) return;
+    const newDifficult = difficult.filter(word => word[0] !== currentWord[0]);
     setDifficult(newDifficult);
     setShowPopup(true);
     setTimeout(() => setShowPopup(false), 1500);
 
     if (newDifficult.length === 0) {
       setCurrentWord(null);
+      setIndex(0);
     } else {
-      const nextIndex = index % newDifficult.length;
-      setIndex(nextIndex);
-      setCurrentWord([newDifficult[nextIndex], ""]);
+      setIndex((prev) => prev % newDifficult.length);
     }
   };
 
@@ -44,12 +44,12 @@ export default function Difficult({ currentWord, setCurrentWord, difficult, setD
   return (
     <div id="app" style={{ position: 'relative' }}>
       <h2>⚠ Trudne słówka</h2>
-      {difficult.length === 0 ? (
+      {difficult.length === 0 || !currentWord ? (
         <p style={{ color: "#000" }}>Brak trudnych słówek ✔</p>
       ) : (
         <>
-          <div className="word">{currentWord[1]}</div>
-          <div className="translation">{currentWord[0]}</div>
+          <div className="word">{currentWord[0]}</div>
+          <div className="translation">{currentWord[1]}</div>
           <button onClick={nextWord} style={{ ...buttonStyle, backgroundColor: '#2196F3' }}>Następne słówko</button>
           <button onClick={removeDifficult} style={{ ...buttonStyle, backgroundColor: '#f44336' }}>Usuń ze słówek trudnych</button>
         </>
@@ -59,7 +59,7 @@ export default function Difficult({ currentWord, setCurrentWord, difficult, setD
       {showPopup && (
         <div style={{
           position: "absolute",
-          top: "-100px",
+          top: "-70px",
           left: "50%",
           transform: "translateX(-50%)",
           backgroundColor: "#4CAF50",

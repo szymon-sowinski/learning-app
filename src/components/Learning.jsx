@@ -6,14 +6,15 @@ export default function Learning({ currentWord, setCurrentWord, randomWord, setM
   const nextWord = () => randomWord();
 
   const markDifficult = () => {
-    if (!difficult.includes(currentWord[0])) {
-      setDifficult([...difficult, currentWord[0]]);
-      setShowPopup("added");
-    } else {
-      setShowPopup("exists");
-    }
-    setTimeout(() => setShowPopup(false), 2000);
-  };
+  const pair = [currentWord[0], currentWord[1]];
+  if (!difficult.some(d => d[0] === currentWord[0])) {
+    setDifficult([...difficult, pair]);
+    setShowPopup("added");
+  } else {
+    setShowPopup("exists");
+  }
+  setTimeout(() => setShowPopup(false), 1000);
+};
 
   return (
     <div id="app" style={{ position: "relative" }}>
