@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { words } from "../App";
 
 export default function IntelligentLearning({ setMode }) {
@@ -7,6 +7,7 @@ export default function IntelligentLearning({ setMode }) {
   const [guessedAnswer, setGuessedAnswer] = useState("");
   const [wordScores, setWordScores] = useState({});
   const [showCorrectPopup, setShowCorrectPopup] = useState(false);
+  const inputRef = useRef(null);
 
   useEffect(() => {
     const scores = {};
@@ -62,6 +63,18 @@ export default function IntelligentLearning({ setMode }) {
     setShowAnswer(true);
   };
 
+  const insertSpecialChar = (char) => {
+    const input = inputRef.current;
+    const start = input.selectionStart;
+    const end = input.selectionEnd;
+    const newValue = guessedAnswer.slice(0, start) + char + guessedAnswer.slice(end);
+    setGuessedAnswer(newValue);
+    setTimeout(() => {
+      input.focus();
+      input.setSelectionRange(start + 1, start + 1);
+    }, 0);
+  };
+
   return (
     <div id="app" style={{ position: 'relative' }}>
       <h2>🤖 Tryb inteligentny</h2>
@@ -70,12 +83,21 @@ export default function IntelligentLearning({ setMode }) {
 
       {!showAnswer ? (
         <>
+          <div style={{ display: 'flex', justifyContent: 'center', marginBottom: '10px', gap: '5px' }}>
+            <button onClick={() => insertSpecialChar("ä")} style={{ width: '40px', padding: '5px' }}>ä</button>
+            <button onClick={() => insertSpecialChar("ö")} style={{ width: '40px', padding: '5px' }}>ö</button>
+            <button onClick={() => insertSpecialChar("ü")} style={{ width: '40px', padding: '5px' }}>ü</button>
+            <button onClick={() => insertSpecialChar("ß")} style={{ width: '40px', padding: '5px' }}>ß</button>
+          </div>
+
           <input
             type="text"
+            ref={inputRef}
             placeholder="Spróbuj zgadnąć"
             value={guessedAnswer}
             onChange={(e) => setGuessedAnswer(e.target.value)}
           />
+
           <button onClick={checkAnswer}>Pokaż odpowiedź</button>
         </>
       ) : (
