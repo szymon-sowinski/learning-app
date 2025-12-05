@@ -18,6 +18,10 @@ export default function Menu({ setMode, randomWord }) {
     setMode("difficult");
   };
 
+  const startIntelligent = () => {
+    setMode("intelligent");
+  };
+
   return (
     <div id="app">
       <h2>MENU GŁÓWNE</h2>
@@ -25,6 +29,7 @@ export default function Menu({ setMode, randomWord }) {
       <button onClick={startQuiz}>🧩 Quiz – 4 opcje</button>
       <button onClick={startTest}>✍ Test – wpisywanie</button>
       <button onClick={startDifficult}>⚠ Powtórka trudnych</button>
+      <button onClick={startIntelligent}>🤖 Tryb inteligentny</button>
     </div>
   );
 }
