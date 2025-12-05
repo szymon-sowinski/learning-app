@@ -4,7 +4,6 @@ import Learning from "./components/Learning";
 import Quiz from "./components/Quiz";
 import Test from "./components/Test";
 import Difficult from "./components/Difficult";
-import IntelligentBox from "./components/IntelligentBox";
 import IntelligentLearning from "./components/IntelligentLearning";
 import "./App.css";
 
@@ -50,7 +49,6 @@ export default function App() {
       {mode === "test" && <Test currentWord={currentWord} setCurrentWord={setCurrentWord} randomWord={randomWord} setMode={setMode} showIntelligent={showIntelligent} setShowIntelligent={setShowIntelligent} />}
       {mode === "difficult" && <Difficult currentWord={currentWord} setCurrentWord={setCurrentWord} difficult={difficult} setDifficult={setDifficult} setMode={setMode} randomWord={randomWord} />}
       {mode === "intelligent" && <IntelligentLearning setMode={setMode} />}
-      {showIntelligent && <IntelligentBox word={showIntelligent} />}
     </>
   );
 }
