@@ -3,6 +3,7 @@ import AdminSidebar from './AdminSidebar';
 import Dashboard from './Dashboard';
 import WordsManager from './WordsManager';
 import Settings from './Settings';
+import './admin.css';
 
 export default function AdminApp() {
   const navigate = useNavigate();
@@ -16,6 +17,7 @@ export default function AdminApp() {
   return (
     <div className="admin-root">
       <AdminSidebar />
+
       <div className="admin-main">
         <Routes>
           <Route path="/" element={<Dashboard />} />
