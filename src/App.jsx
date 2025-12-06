@@ -1,5 +1,6 @@
 import { useState } from "react";
 import Menu from "./components/Menu";
+import PopQuiz from "./components/PopQuiz";
 import Learning from "./components/Learning";
 import Quiz from "./components/Quiz";
 import Test from "./components/Test";
@@ -49,6 +50,7 @@ export default function App() {
       {mode === "test" && <Test currentWord={currentWord} setCurrentWord={setCurrentWord} randomWord={randomWord} setMode={setMode} showIntelligent={showIntelligent} setShowIntelligent={setShowIntelligent} />}
       {mode === "difficult" && <Difficult currentWord={currentWord} setCurrentWord={setCurrentWord} difficult={difficult} setDifficult={setDifficult} setMode={setMode} randomWord={randomWord} />}
       {mode === "intelligent" && <IntelligentLearning setMode={setMode} />}
+      {mode === "popQuiz" && <PopQuiz setMode={setMode} />}
     </>
   );
 }
