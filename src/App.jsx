@@ -6,6 +6,9 @@ import Quiz from "./components/Quiz";
 import Test from "./components/Test";
 import Difficult from "./components/Difficult";
 import IntelligentLearning from "./components/IntelligentLearning";
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import AdminLogin from "./admin/AdminLogin";
+import AdminApp from "./admin/AdminApp";
 import "./App.css";
 
 export const words = [
@@ -43,14 +46,22 @@ export default function App() {
   };
 
   return (
-    <>
-      {mode === "menu" && <Menu setMode={setMode} randomWord={randomWord} />}
-      {mode === "learning" && <Learning currentWord={currentWord} setCurrentWord={setCurrentWord} randomWord={randomWord} setMode={setMode} difficult={difficult} setDifficult={setDifficult} />}
-      {mode === "quiz" && <Quiz currentWord={currentWord} setCurrentWord={setCurrentWord} randomWord={randomWord} setMode={setMode} showIntelligent={showIntelligent} setShowIntelligent={setShowIntelligent} />}
-      {mode === "test" && <Test currentWord={currentWord} setCurrentWord={setCurrentWord} randomWord={randomWord} setMode={setMode} showIntelligent={showIntelligent} setShowIntelligent={setShowIntelligent} />}
-      {mode === "difficult" && <Difficult currentWord={currentWord} setCurrentWord={setCurrentWord} difficult={difficult} setDifficult={setDifficult} setMode={setMode} randomWord={randomWord} />}
-      {mode === "intelligent" && <IntelligentLearning setMode={setMode} />}
-      {mode === "popQuiz" && <PopQuiz setMode={setMode} />}
-    </>
+    <Router basename="/learning-app">
+      <Routes>
+        <Route path="/" element={
+          <>
+            {mode === "menu" && <Menu setMode={setMode} randomWord={randomWord} />}
+            {mode === "learning" && <Learning currentWord={currentWord} setCurrentWord={setCurrentWord} randomWord={randomWord} setMode={setMode} difficult={difficult} setDifficult={setDifficult} />}
+            {mode === "quiz" && <Quiz currentWord={currentWord} setCurrentWord={setCurrentWord} randomWord={randomWord} setMode={setMode} showIntelligent={showIntelligent} setShowIntelligent={setShowIntelligent} />}
+            {mode === "test" && <Test currentWord={currentWord} setCurrentWord={setCurrentWord} randomWord={randomWord} setMode={setMode} showIntelligent={showIntelligent} setShowIntelligent={setShowIntelligent} />}
+            {mode === "difficult" && <Difficult currentWord={currentWord} setCurrentWord={setCurrentWord} difficult={difficult} setDifficult={setDifficult} setMode={setMode} randomWord={randomWord} />}
+            {mode === "intelligent" && <IntelligentLearning setMode={setMode} />}
+            {mode === "popQuiz" && <PopQuiz setMode={setMode} />}
+          </>
+        } />
+        <Route path="/admin/login" element={<AdminLogin />} />
+        <Route path="/admin/*" element={<AdminApp />} />
+      </Routes>
+    </Router>
   );
 }

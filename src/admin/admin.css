@@ -1,0 +1,6 @@
+.admin-root { display: flex; height: 100vh; font-family: Arial, Helvetica, sans-serif; }
+.admin-sidebar { width: 200px; background: #1f2937; color: #fff; padding: 16px; display: flex; flex-direction: column; }
+.admin-main { flex: 1; padding: 20px; background: #f3f4f6; overflow: auto; }
+.admin-panel h2 { margin-top: 0; }
+.admin-login { max-width: 400px; margin: 40px auto; padding: 20px; border: 1px solid #e5e7eb; border-radius: 8px; background: white; }
+.logout { margin-top: auto; background: #b91c1c; color: white; border: none; padding: 8px; cursor: pointer; border-radius: 5px; }

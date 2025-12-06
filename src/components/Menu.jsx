@@ -35,6 +35,9 @@ export default function Menu({ setMode, randomWord }) {
       <button onClick={startDifficult}>⚠ Powtórka trudnych</button>
       <button onClick={startIntelligent}>🤖 Tryb inteligentny</button>
       <button onClick={startPopQuiz}>🧪 Kartkówka</button>
+      <button onClick={() => window.location.href = "/learning-app/admin/login"}>
+      🔧 Panel administracyjny
+</button>
     </div>
   );
 }
