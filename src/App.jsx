@@ -10,21 +10,12 @@ import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import AdminLogin from "./admin/AdminLogin";
 import AdminApp from "./admin/AdminApp";
 import "./App.css";
+import { fetchCollections, fetchWords } from "./service/fetchFunctions"
 
-import axios from "axios";
 import { QueryClient, QueryClientProvider, useQuery } from "@tanstack/react-query";
 
 const queryClient = new QueryClient();
 
-const fetchCollections = async () => {
-  const res = await axios.get("https://fiszki-api.tenco.waw.pl/collections");
-  return res.data;
-};
-
-const fetchWords = async (groupId) => {
-  const res = await axios.get(`https://fiszki-api.tenco.waw.pl/fiszki/${groupId}`);
-  return res.data.map(item => [item.de, item.pl]);
-};
 
 function AppInner() {
   const [mode, setMode] = useState("menu");
@@ -39,12 +30,14 @@ function AppInner() {
     staleTime: 1000 * 60 * 5
   });
 
-  const { data: words = [] } = useQuery({
+  const { data: words1 = [] } = useQuery({
     queryKey: ["words", groupId],
     queryFn: () => fetchWords(groupId),
     enabled: !!groupId,
     staleTime: 1000 * 60 * 5
   });
+
+  const words = words1.map(item => [item.pl, item.de])
 
   const randomWord = (list = words) => {
     if (!list.length) return null;
