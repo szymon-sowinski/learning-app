@@ -86,6 +86,13 @@ export default function Kartkowka({ setMode, words }) {
       <h2>✍ Pytanie {step + 1} / 20</h2>
       <div className="word">{w[0]}</div>
 
+      <div style={{ display: 'flex', justifyContent: 'center', marginBottom: '10px', gap: '5px' }}>
+        <button onClick={() => setAnswer(prev => prev + "ä")} style={{ width: '40px', padding: '5px' }}>ä</button>
+        <button onClick={() => setAnswer(prev => prev + "ö")} style={{ width: '40px', padding: '5px' }}>ö</button>
+        <button onClick={() => setAnswer(prev => prev + "ü")} style={{ width: '40px', padding: '5px' }}>ü</button>
+        <button onClick={() => setAnswer(prev => prev + "ß")} style={{ width: '40px', padding: '5px' }}>ß</button>
+      </div>
+
       <input
         type="text"
         placeholder="Wpisz tłumaczenie"
