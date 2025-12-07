@@ -4,10 +4,10 @@ export default function Quiz({ currentWord, setCurrentWord, randomWord, setMode,
   const [options, setOptions] = useState([]);
 
   const generateOptions = (word) => {
-    const temp = [word[0]];
+    const temp = [word[1]];
     while (temp.length < 4) {
       const randomIdx = Math.floor(Math.random() * words.length);
-      const newWord = words[randomIdx][0];
+      const newWord = words[randomIdx][1];
       if (!temp.includes(newWord)) temp.push(newWord);
     }
     return temp.sort(() => Math.random() - 0.5);
@@ -18,10 +18,10 @@ export default function Quiz({ currentWord, setCurrentWord, randomWord, setMode,
   }, [currentWord]);
 
   const handleAnswer = (answer) => {
-    if (answer === currentWord[0]) {
+    if (answer === currentWord[1]) {
       alert("✔ Poprawna odpowiedź!");
     } else {
-      alert(`❌ Błędna! Poprawnie: ${currentWord[0]}`);
+      alert(`❌ Błędna! Poprawnie: ${currentWord[1]}`);
       setShowIntelligent(currentWord);
     }
     const newWord = randomWord();
@@ -33,7 +33,7 @@ export default function Quiz({ currentWord, setCurrentWord, randomWord, setMode,
   return (
     <div id="app">
       <h2>🧩 Quiz</h2>
-      <div className="word">{currentWord[1]}</div>
+      <div className="word">{currentWord[0]}</div>
       {options.map((opt, idx) => (
         <button key={idx} onClick={() => handleAnswer(opt)}>{opt}</button>
       ))}

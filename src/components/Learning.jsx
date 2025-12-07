@@ -19,9 +19,9 @@ export default function Learning({ currentWord, setCurrentWord, randomWord, setM
   return (
     <div id="app" style={{ position: "relative" }}>
       <h2>📘 Nauka</h2>
-      <div className="word">{currentWord[1]}</div>
+      <div className="word">{currentWord[0]}</div>
       <div className="small">Tłumaczenie:</div>
-      <div className="translation">{currentWord[0]}</div>
+      <div className="translation">{currentWord[1]}</div>
       <button onClick={nextWord}>Następne słówko</button>
       <button onClick={markDifficult}>Dodaj do trudnych</button>
       <button className="back" onClick={() => setMode("menu")}>⏪ Menu</button>

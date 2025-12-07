@@ -5,7 +5,7 @@ export default function Test({ currentWord, setCurrentWord, randomWord, setMode,
   const inputRef = useRef(null);
 
   const handleSubmit = () => {
-    if (answer.trim().toLowerCase() === currentWord[0].toLowerCase()) {
+    if (answer.trim().toLowerCase() === currentWord[1].toLowerCase()) {
       alert(`✔ Poprawna odpowiedź!\n${currentWord[0]} = ${currentWord[1]}`);
     } else {
       alert(`❌ Błędna odpowiedź!\nPoprawnie: ${currentWord[0]} = ${currentWord[1]}`);
@@ -31,7 +31,7 @@ export default function Test({ currentWord, setCurrentWord, randomWord, setMode,
   return (
     <div id="app">
       <h2>✍ Test</h2>
-      <div className="word">{currentWord[1]}</div>
+      <div className="word">{currentWord[0]}</div>
 
       <div style={{ display: 'flex', justifyContent: 'center', marginBottom: '10px', gap: '5px' }}>
         <button onClick={() => insertSpecialChar("ä")} style={{ width: '40px', padding: '5px' }}>ä</button>

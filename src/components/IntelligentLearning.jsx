@@ -55,7 +55,7 @@ export default function IntelligentLearning({ setMode, words }) {
   if (!currentWord) return null;
 
   const checkAnswer = () => {
-    if (guessedAnswer.trim().toLowerCase() === currentWord[0].toLowerCase()) {
+    if (guessedAnswer.trim().toLowerCase() === currentWord[1].toLowerCase()) {
       setShowCorrectPopup(true);
       setTimeout(() => setShowCorrectPopup(false), 1500);
     }
@@ -78,7 +78,7 @@ export default function IntelligentLearning({ setMode, words }) {
     <div id="app" style={{ position: 'relative' }}>
       <h2>🤖 Tryb inteligentny</h2>
 
-      <div className="word">Polskie słowo: {currentWord[1]}</div>
+      <div className="word">Polskie słowo: {currentWord[0]}</div>
 
       {!showAnswer ? (
         <>
@@ -101,7 +101,7 @@ export default function IntelligentLearning({ setMode, words }) {
         </>
       ) : (
         <>
-          <div className="translation">Poprawna odpowiedź: {currentWord[0]}</div>
+          <div className="translation">Poprawna odpowiedź: {currentWord[1]}</div>
           <div>Oceń trudność słówka:</div>
           <div style={{ marginTop: '10px' }}>
             <button onClick={() => handleDifficulty("łatwe")} style={{ marginRight: '5px' }}>Łatwe</button>

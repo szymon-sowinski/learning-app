@@ -13,14 +13,14 @@ export default function Kartkowka({ setMode, words }) {
     const quizQ = shuffled.slice(0, 10);
     const writeQ = shuffled.slice(10, 20);
 
-    const quizWithOptions = quizQ.map(([de, pl]) => {
+    const quizWithOptions = quizQ.map(([pl, de]) => {
       const options = [
         de,
         ...words
-          .filter(w => w[1] !== pl)
+          .filter(w => w[0] !== pl)
           .sort(() => Math.random() - 0.5)
           .slice(0, 3)
-          .map(w => w[0])
+          .map(w => w[1])
       ].sort(() => Math.random() - 0.5);
 
       return { pl, de, options };
@@ -84,7 +84,7 @@ export default function Kartkowka({ setMode, words }) {
   return (
     <div id="app">
       <h2>✍ Pytanie {step + 1} / 20</h2>
-      <div className="word">{w[1]}</div>
+      <div className="word">{w[0]}</div>
 
       <input
         type="text"
@@ -93,7 +93,7 @@ export default function Kartkowka({ setMode, words }) {
         onChange={(e) => setAnswer(e.target.value)}
       />
 
-      <button onClick={() => handleWriteAnswer(w[0])}>Dalej →</button>
+      <button onClick={() => handleWriteAnswer(w[1])}>Dalej →</button>
     </div>
   );
 }
