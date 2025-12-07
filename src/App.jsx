@@ -11,92 +11,121 @@ import AdminLogin from "./admin/AdminLogin";
 import AdminApp from "./admin/AdminApp";
 import "./App.css";
 
-import axios, { Axios } from "axios"
+import axios from "axios";
+import { QueryClient, QueryClientProvider, useQuery } from "@tanstack/react-query";
 
+const queryClient = new QueryClient();
 
+const fetchCollections = async () => {
+  const res = await axios.get("https://fiszki-api.tenco.waw.pl/collections");
+  return res.data;
+};
 
-export default function App() {
+const fetchWords = async (groupId) => {
+  const res = await axios.get(`https://fiszki-api.tenco.waw.pl/fiszki/${groupId}`);
+  return res.data.map(item => [item.de, item.pl]);
+};
 
-  const [words, setWords] = useState([
-    ["das Abi", "matura"], ["die Anzeige", "ogłoszenie"], ["die Arbeitsstunde", "godzina pracy"],
-    ["die Aushilfe", "pomoc, pomocnik"], ["außerdem", "oprócz tego"], ["ohne Barrieren", "bez barier"],
-    ["der Bereich", "zakres, obszar"], ["die Berufs- und Studienorientierung", "orientacja dotycząca zawodu i kierunku studiów"],
-    ["das Berufsinformationszentrum", "centrum orientacji zawodowej"], ["die Bewerbung", "podanie o pracę"],
-    ["die Bezahlung", "zapłata"], ["der Briefumschlag", "koperta"], ["darum", "dlatego"], ["der Diebstahl", "kradzież"],
-    ["die Eisdiele", "lodziarnia"], ["der Fahrgast", "pasażer"], ["die Ferienschwimmschule", "letnia szkółka pływania"],
-    ["sich Gedanken machen", "zastanawiać się"], ["die Gerechtigkeit", "sprawiedliwość"], ["das Gericht", "sąd"],
-    ["die Hektik", "pośpiech"], ["der Held", "bohater"], ["im In- und Ausland", "w kraju i za granicą"], ["das Jura", "prawo (kierunek studiów)"],
-    ["das Klischee", "stereotyp"], ["den Knopf drücken", "naciskać guzik"], ["Kontakte aufnehmen", "nawiązywać kontakty"],
-    ["der Kopierer", "kopiarka"], ["der Kriminalfall", "sprawa kryminalna"], ["der Kunde", "klient"],
-    ["die Prüfung", "egzamin"], ["im Rahmen", "w ramach"], ["die Saisonstelle", "posada sezonowa"],
-    ["die Schichtarbeit", "praca w systemie zmianowym"], ["schließlich", "w końcu"], ["der Schulabschluss", "ukończenie szkoły"],
-    ["die Schwäche", "słaba strona, słabość"], ["das Softwareprogramm entwickeln", "opracowywać oprogramowanie"],
-    ["die Sommersaison", "sezon letni"], ["sonst", "w przeciwnym razie"], ["die Sportakademie", "Akademia Sportu"],
-    ["das Sportmanagement", "kierownictwo sportu"], ["die Stärke", "mocna strona"], ["Stärken zeigen", "pokazywać mocne strony"],
-    ["die Stelle", "posada"], ["mit Stress umgehen", "obchodzić się ze stresem"], ["das Studienangebot", "oferta studiów"],
-    ["das Studium abschließen", "ukończyć studia"], ["die Tourismusbranche", "branża turystyczna"], ["die Touristikagentur", "agencja turystyczna"],
-    ["Unterkunft und Verpflegung", "nocleg i wyżywienie"], ["die Versicherung", "ubezpieczenie"], ["der Vorteil", "zaleta"],
-    ["der Wandel", "zmiana, przemiana"], ["der Zukunftsplan", "plan na przyszłość"]
-  ]);
-
+function AppInner() {
   const [mode, setMode] = useState("menu");
   const [currentWord, setCurrentWord] = useState(null);
   const [difficult, setDifficult] = useState([]);
   const [showIntelligent, setShowIntelligent] = useState(null);
-  const [groupId, setGroupId] = useState(1)
-  const [collections, setCollections] = useState(null)
+  const [groupId, setGroupId] = useState(1);
 
+  const { data: collections } = useQuery({
+    queryKey: ["collections"],
+    queryFn: fetchCollections,
+    staleTime: 1000 * 60 * 5
+  });
+
+  const { data: words = [] } = useQuery({
+    queryKey: ["words", groupId],
+    queryFn: () => fetchWords(groupId),
+    enabled: !!groupId,
+    staleTime: 1000 * 60 * 5
+  });
 
   const randomWord = (list = words) => {
+    if (!list.length) return null;
     const idx = Math.floor(Math.random() * list.length);
     setCurrentWord(list[idx]);
     return list[idx];
   };
 
-
-
-  useEffect(() => {
-    (async () => {
-      const res = await axios.get("https://fiszki-api.tenco.waw.pl/collections");
-      console.log(res.data)
-
-      setCollections(res.data)
-    })()
-  }, [])
-
-  useEffect(() => {
-    (async () => {
-      const res = await axios.get(`https://fiszki-api.tenco.waw.pl/fiszki/${groupId}`);
-      console.log(res.data.map(item => [item.de, item.pl]))
-
-      setWords(res.data.map(item => [item.de, item.pl]))
-    })()
-  }, [groupId])
-
   return (
     <Router basename="/">
       <Routes>
-        <Route path="/" element={
-          <>
-            {mode === "menu" && <Menu setMode={setMode} randomWord={randomWord} />}
-            {mode === "learning" && <Learning currentWord={currentWord} setCurrentWord={setCurrentWord} randomWord={randomWord} setMode={setMode} difficult={difficult} setDifficult={setDifficult} />}
-            {mode === "quiz" && <Quiz currentWord={currentWord} setCurrentWord={setCurrentWord} randomWord={randomWord} setMode={setMode} showIntelligent={showIntelligent} setShowIntelligent={setShowIntelligent} words={words} />}
-            {mode === "test" && <Test currentWord={currentWord} setCurrentWord={setCurrentWord} randomWord={randomWord} setMode={setMode} showIntelligent={showIntelligent} setShowIntelligent={setShowIntelligent} />}
-            {mode === "difficult" && <Difficult currentWord={currentWord} setCurrentWord={setCurrentWord} difficult={difficult} setDifficult={setDifficult} setMode={setMode} randomWord={randomWord} />}
-            {mode === "intelligent" && <IntelligentLearning setMode={setMode} words={words} />}
-            {mode === "popQuiz" && <PopQuiz setMode={setMode} words={words} />}
-            <select onChange={(e) => setGroupId(e.target.value)}>
-              {
-                collections ? collections.map(element => {
-                  return (<option value={element.id}>{element.name}</option>)
-                }) : ""
-              }
-            </select>
-          </>
-        } />
+        <Route
+          path="/"
+          element={
+            <>
+              {mode === "menu" && <Menu setMode={setMode} randomWord={randomWord} />}
+              {mode === "learning" && (
+                <Learning
+                  currentWord={currentWord}
+                  setCurrentWord={setCurrentWord}
+                  randomWord={randomWord}
+                  setMode={setMode}
+                  difficult={difficult}
+                  setDifficult={setDifficult}
+                />
+              )}
+              {mode === "quiz" && (
+                <Quiz
+                  currentWord={currentWord}
+                  setCurrentWord={setCurrentWord}
+                  randomWord={randomWord}
+                  setMode={setMode}
+                  showIntelligent={showIntelligent}
+                  setShowIntelligent={setShowIntelligent}
+                  words={words}
+                />
+              )}
+              {mode === "test" && (
+                <Test
+                  currentWord={currentWord}
+                  setCurrentWord={setCurrentWord}
+                  randomWord={randomWord}
+                  setMode={setMode}
+                  showIntelligent={showIntelligent}
+                  setShowIntelligent={setShowIntelligent}
+                />
+              )}
+              {mode === "difficult" && (
+                <Difficult
+                  currentWord={currentWord}
+                  setCurrentWord={setCurrentWord}
+                  difficult={difficult}
+                  setDifficult={setDifficult}
+                  setMode={setMode}
+                  randomWord={randomWord}
+                />
+              )}
+              {mode === "intelligent" && <IntelligentLearning setMode={setMode} words={words} />}
+              {mode === "popQuiz" && <PopQuiz setMode={setMode} words={words} />}
+
+              <select onChange={(e) => setGroupId(e.target.value)}>
+                {collections?.map((el) => (
+                  <option key={el.id} value={el.id}>
+                    {el.name}
+                  </option>
+                ))}
+              </select>
+            </>
+          }
+        />
         <Route path="/admin/login" element={<AdminLogin />} />
         <Route path="/admin/*" element={<AdminApp />} />
       </Routes>
     </Router>
+  );
+}
+
+export default function App() {
+  return (
+    <QueryClientProvider client={queryClient}>
+      <AppInner />
+    </QueryClientProvider>
   );
 }
