@@ -74,7 +74,7 @@ export default function App() {
   }, [groupId])
 
   return (
-    <Router basename="/learning-app">
+    <Router basename="/">
       <Routes>
         <Route path="/" element={
           <>
