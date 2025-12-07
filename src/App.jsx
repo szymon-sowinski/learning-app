@@ -11,29 +11,34 @@ import AdminLogin from "./admin/AdminLogin";
 import AdminApp from "./admin/AdminApp";
 import "./App.css";
 
-export const words = [
-  ["das Abi","matura"], ["die Anzeige","ogłoszenie"], ["die Arbeitsstunde","godzina pracy"],
-  ["die Aushilfe","pomoc, pomocnik"], ["außerdem","oprócz tego"], ["ohne Barrieren","bez barier"],
-  ["der Bereich","zakres, obszar"], ["die Berufs- und Studienorientierung","orientacja dotycząca zawodu i kierunku studiów"],
-  ["das Berufsinformationszentrum","centrum orientacji zawodowej"], ["die Bewerbung","podanie o pracę"],
-  ["die Bezahlung","zapłata"], ["der Briefumschlag","koperta"], ["darum","dlatego"], ["der Diebstahl","kradzież"],
-  ["die Eisdiele","lodziarnia"], ["der Fahrgast","pasażer"], ["die Ferienschwimmschule","letnia szkółka pływania"],
-  ["sich Gedanken machen","zastanawiać się"], ["die Gerechtigkeit","sprawiedliwość"], ["das Gericht","sąd"],
-  ["die Hektik","pośpiech"], ["der Held","bohater"], ["im In- und Ausland","w kraju i za granicą"], ["das Jura","prawo (kierunek studiów)"],
-  ["das Klischee","stereotyp"], ["den Knopf drücken","naciskać guzik"], ["Kontakte aufnehmen","nawiązywać kontakty"],
-  ["der Kopierer","kopiarka"], ["der Kriminalfall","sprawa kryminalna"], ["der Kunde","klient"],
-  ["die Prüfung","egzamin"], ["im Rahmen","w ramach"], ["die Saisonstelle","posada sezonowa"],
-  ["die Schichtarbeit","praca w systemie zmianowym"], ["schließlich","w końcu"], ["der Schulabschluss","ukończenie szkoły"],
-  ["die Schwäche","słaba strona, słabość"], ["das Softwareprogramm entwickeln","opracowywać oprogramowanie"],
-  ["die Sommersaison","sezon letni"], ["sonst","w przeciwnym razie"], ["die Sportakademie","Akademia Sportu"],
-  ["das Sportmanagement","kierownictwo sportu"], ["die Stärke","mocna strona"], ["Stärken zeigen","pokazywać mocne strony"],
-  ["die Stelle","posada"], ["mit Stress umgehen","obchodzić się ze stresem"], ["das Studienangebot","oferta studiów"],
-  ["das Studium abschließen","ukończyć studia"], ["die Tourismusbranche","branża turystyczna"], ["die Touristikagentur","agencja turystyczna"],
-  ["Unterkunft und Verpflegung","nocleg i wyżywienie"], ["die Versicherung","ubezpieczenie"], ["der Vorteil","zaleta"],
-  ["der Wandel","zmiana, przemiana"], ["der Zukunftsplan","plan na przyszłość"]
-];
+import axios, { Axios } from "axios"
+
+
 
 export default function App() {
+
+  const [words, setWords] = useState([
+    ["das Abi", "matura"], ["die Anzeige", "ogłoszenie"], ["die Arbeitsstunde", "godzina pracy"],
+    ["die Aushilfe", "pomoc, pomocnik"], ["außerdem", "oprócz tego"], ["ohne Barrieren", "bez barier"],
+    ["der Bereich", "zakres, obszar"], ["die Berufs- und Studienorientierung", "orientacja dotycząca zawodu i kierunku studiów"],
+    ["das Berufsinformationszentrum", "centrum orientacji zawodowej"], ["die Bewerbung", "podanie o pracę"],
+    ["die Bezahlung", "zapłata"], ["der Briefumschlag", "koperta"], ["darum", "dlatego"], ["der Diebstahl", "kradzież"],
+    ["die Eisdiele", "lodziarnia"], ["der Fahrgast", "pasażer"], ["die Ferienschwimmschule", "letnia szkółka pływania"],
+    ["sich Gedanken machen", "zastanawiać się"], ["die Gerechtigkeit", "sprawiedliwość"], ["das Gericht", "sąd"],
+    ["die Hektik", "pośpiech"], ["der Held", "bohater"], ["im In- und Ausland", "w kraju i za granicą"], ["das Jura", "prawo (kierunek studiów)"],
+    ["das Klischee", "stereotyp"], ["den Knopf drücken", "naciskać guzik"], ["Kontakte aufnehmen", "nawiązywać kontakty"],
+    ["der Kopierer", "kopiarka"], ["der Kriminalfall", "sprawa kryminalna"], ["der Kunde", "klient"],
+    ["die Prüfung", "egzamin"], ["im Rahmen", "w ramach"], ["die Saisonstelle", "posada sezonowa"],
+    ["die Schichtarbeit", "praca w systemie zmianowym"], ["schließlich", "w końcu"], ["der Schulabschluss", "ukończenie szkoły"],
+    ["die Schwäche", "słaba strona, słabość"], ["das Softwareprogramm entwickeln", "opracowywać oprogramowanie"],
+    ["die Sommersaison", "sezon letni"], ["sonst", "w przeciwnym razie"], ["die Sportakademie", "Akademia Sportu"],
+    ["das Sportmanagement", "kierownictwo sportu"], ["die Stärke", "mocna strona"], ["Stärken zeigen", "pokazywać mocne strony"],
+    ["die Stelle", "posada"], ["mit Stress umgehen", "obchodzić się ze stresem"], ["das Studienangebot", "oferta studiów"],
+    ["das Studium abschließen", "ukończyć studia"], ["die Tourismusbranche", "branża turystyczna"], ["die Touristikagentur", "agencja turystyczna"],
+    ["Unterkunft und Verpflegung", "nocleg i wyżywienie"], ["die Versicherung", "ubezpieczenie"], ["der Vorteil", "zaleta"],
+    ["der Wandel", "zmiana, przemiana"], ["der Zukunftsplan", "plan na przyszłość"]
+  ]);
+
   const [mode, setMode] = useState("menu");
   const [currentWord, setCurrentWord] = useState(null);
   const [difficult, setDifficult] = useState([]);
