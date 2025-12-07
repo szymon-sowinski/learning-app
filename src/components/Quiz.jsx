@@ -2,6 +2,8 @@ import { useState, useEffect } from "react";
 
 export default function Quiz({ currentWord, setCurrentWord, randomWord, setMode, showIntelligent, setShowIntelligent, words }) {
   const [options, setOptions] = useState([]);
+  const [selectedAnswer, setSelectedAnswer] = useState(null);
+  const [correctAnswer, setCorrectAnswer] = useState(null); 
 
   const generateOptions = (word) => {
     const temp = [word[1]];
@@ -15,17 +17,25 @@ export default function Quiz({ currentWord, setCurrentWord, randomWord, setMode,
 
   useEffect(() => {
     if (currentWord) setOptions(generateOptions(currentWord));
+    setSelectedAnswer(null);
+    setCorrectAnswer(null);
   }, [currentWord]);
 
   const handleAnswer = (answer) => {
-    if (answer === currentWord[1]) {
-      alert("✔ Poprawna odpowiedź!");
-    } else {
-      alert(`❌ Błędna! Poprawnie: ${currentWord[1]}`);
+    setSelectedAnswer(answer);
+    setCorrectAnswer(currentWord[1]);
+
+    if (answer !== currentWord[1]) {
       setShowIntelligent(currentWord);
     }
-    const newWord = randomWord();
-    setOptions(generateOptions(newWord));
+
+    setTimeout(() => {
+      const newWord = randomWord();
+      setCurrentWord(newWord);
+      setOptions(generateOptions(newWord));
+      setSelectedAnswer(null);
+      setCorrectAnswer(null);
+    }, 1000);
   };
 
   if (!currentWord) return null;
@@ -34,9 +44,23 @@ export default function Quiz({ currentWord, setCurrentWord, randomWord, setMode,
     <div id="app">
       <h2>🧩 Quiz</h2>
       <div className="word">{currentWord[0]}</div>
-      {options.map((opt, idx) => (
-        <button key={idx} onClick={() => handleAnswer(opt)}>{opt}</button>
-      ))}
+      {options.map((opt, idx) => {
+        let bgColor = "";
+        if (selectedAnswer) {
+          if (opt === correctAnswer) bgColor = "green";
+          else if (opt === selectedAnswer && opt !== correctAnswer) bgColor = "red";
+        }
+
+        return (
+          <button
+            key={idx}
+            onClick={() => !selectedAnswer && handleAnswer(opt)}
+            style={{ backgroundColor: bgColor, color: bgColor ? "white" : "black" }}
+          >
+            {opt}
+          </button>
+        );
+      })}
       <button className="back" onClick={() => setMode("menu")}>⏪ Menu</button>
     </div>
   );
