@@ -1,7 +1,6 @@
 import { useEffect, useState } from "react";
-import { words } from "../App";
 
-export default function Kartkowka({ setMode }) {
+export default function Kartkowka({ setMode, words }) {
   const [quizQuestions, setQuizQuestions] = useState([]);
   const [writeQuestions, setWriteQuestions] = useState([]);
   const [step, setStep] = useState(0);

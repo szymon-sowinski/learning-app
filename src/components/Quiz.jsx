@@ -1,7 +1,6 @@
 import { useState, useEffect } from "react";
-import { words } from "../App"; 
 
-export default function Quiz({ currentWord, setCurrentWord, randomWord, setMode, showIntelligent, setShowIntelligent }) {
+export default function Quiz({ currentWord, setCurrentWord, randomWord, setMode, showIntelligent, setShowIntelligent, words }) {
   const [options, setOptions] = useState([]);
 
   const generateOptions = (word) => {
@@ -25,8 +24,8 @@ export default function Quiz({ currentWord, setCurrentWord, randomWord, setMode,
       alert(`❌ Błędna! Poprawnie: ${currentWord[0]}`);
       setShowIntelligent(currentWord);
     }
-    const newWord = randomWord(); 
-    setOptions(generateOptions(newWord)); 
+    const newWord = randomWord();
+    setOptions(generateOptions(newWord));
   };
 
   if (!currentWord) return null;

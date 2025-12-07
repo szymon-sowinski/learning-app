@@ -1,7 +1,6 @@
 import { useState, useEffect, useRef } from "react";
-import { words } from "../App";
 
-export default function IntelligentLearning({ setMode }) {
+export default function IntelligentLearning({ setMode, words }) {
   const [currentWord, setCurrentWord] = useState(null);
   const [showAnswer, setShowAnswer] = useState(false);
   const [guessedAnswer, setGuessedAnswer] = useState("");
@@ -46,7 +45,7 @@ export default function IntelligentLearning({ setMode }) {
         newScores[de] = newScores[de] || 1;
         break;
       case "trudne":
-        newScores[de] = (newScores[de] || 1) + 2; 
+        newScores[de] = (newScores[de] || 1) + 2;
         break;
     }
     setWordScores(newScores);

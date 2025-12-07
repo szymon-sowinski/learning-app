@@ -1,5 +1,4 @@
 import { useState, useEffect } from "react";
-import { words } from "../App";
 
 export default function Dashboard() {
   const [difficultWords, setDifficultWords] = useState([]);
@@ -16,7 +15,6 @@ export default function Dashboard() {
       <div className="dashboard-cards">
         <div className="card">
           <h3>📚 Wszystkie słówka</h3>
-          <p>{words.length}</p>
         </div>
         <div className="card">
           <h3>⚠ Trudne słówka</h3>
