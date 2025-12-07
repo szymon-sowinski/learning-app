@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Menu from "./components/Menu";
 import PopQuiz from "./components/PopQuiz";
 import Learning from "./components/Learning";
@@ -43,12 +43,35 @@ export default function App() {
   const [currentWord, setCurrentWord] = useState(null);
   const [difficult, setDifficult] = useState([]);
   const [showIntelligent, setShowIntelligent] = useState(null);
+  const [groupId, setGroupId] = useState(1)
+  const [collections, setCollections] = useState(null)
+
 
   const randomWord = (list = words) => {
     const idx = Math.floor(Math.random() * list.length);
     setCurrentWord(list[idx]);
     return list[idx];
   };
+
+
+
+  useEffect(() => {
+    (async () => {
+      const res = await axios.get("https://fiszki-api.tenco.waw.pl/collections");
+      console.log(res.data)
+
+      setCollections(res.data)
+    })()
+  }, [])
+
+  useEffect(() => {
+    (async () => {
+      const res = await axios.get(`https://fiszki-api.tenco.waw.pl/fiszki/${groupId}`);
+      console.log(res.data.map(item => [item.de, item.pl]))
+
+      setWords(res.data.map(item => [item.de, item.pl]))
+    })()
+  }, [groupId])
 
   return (
     <Router basename="/learning-app">
@@ -57,11 +80,18 @@ export default function App() {
           <>
             {mode === "menu" && <Menu setMode={setMode} randomWord={randomWord} />}
             {mode === "learning" && <Learning currentWord={currentWord} setCurrentWord={setCurrentWord} randomWord={randomWord} setMode={setMode} difficult={difficult} setDifficult={setDifficult} />}
-            {mode === "quiz" && <Quiz currentWord={currentWord} setCurrentWord={setCurrentWord} randomWord={randomWord} setMode={setMode} showIntelligent={showIntelligent} setShowIntelligent={setShowIntelligent} />}
+            {mode === "quiz" && <Quiz currentWord={currentWord} setCurrentWord={setCurrentWord} randomWord={randomWord} setMode={setMode} showIntelligent={showIntelligent} setShowIntelligent={setShowIntelligent} words={words} />}
             {mode === "test" && <Test currentWord={currentWord} setCurrentWord={setCurrentWord} randomWord={randomWord} setMode={setMode} showIntelligent={showIntelligent} setShowIntelligent={setShowIntelligent} />}
             {mode === "difficult" && <Difficult currentWord={currentWord} setCurrentWord={setCurrentWord} difficult={difficult} setDifficult={setDifficult} setMode={setMode} randomWord={randomWord} />}
-            {mode === "intelligent" && <IntelligentLearning setMode={setMode} />}
-            {mode === "popQuiz" && <PopQuiz setMode={setMode} />}
+            {mode === "intelligent" && <IntelligentLearning setMode={setMode} words={words} />}
+            {mode === "popQuiz" && <PopQuiz setMode={setMode} words={words} />}
+            <select onChange={(e) => setGroupId(e.target.value)}>
+              {
+                collections ? collections.map(element => {
+                  return (<option value={element.id}>{element.name}</option>)
+                }) : ""
+              }
+            </select>
           </>
         } />
         <Route path="/admin/login" element={<AdminLogin />} />
