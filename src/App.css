@@ -44,6 +44,10 @@ h2 {
   z-index: 1;
 }
 
+h3 {
+    color: black;
+}
+
 .appHeading {
   font-size: 3rem;
   font-weight: 900;

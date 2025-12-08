@@ -40,7 +40,7 @@ export default function AdminSidebar() {
           className="logout"
           onClick={() => {
             localStorage.removeItem('admin_token');
-            window.location.href = '/learning-app';
+            window.location.href = '/';
           }}
         >
           <FaSignOutAlt style={{ marginRight: '8px' }} />
