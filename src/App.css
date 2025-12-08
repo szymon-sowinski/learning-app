@@ -1,104 +1,190 @@
-body {
-        font-family: Arial, sans-serif;
-        background: #eef2f3;
-        margin: 0;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        min-height: 100vh;
-        padding: 10px;
-        box-sizing: border-box;
-    }
+/* GLOBAL WRAPPER */
+#app {
+  width: 100%;
+  min-height: 100vh;
+  padding: 80px 100px;
+  background: linear-gradient(160deg, #e0f0ff 0%, #ffffff 100%);
+  background-attachment: fixed;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+  animation: fadeIn 0.7s ease-out;
+  position: relative;
+  overflow: hidden;
+}
 
-    #app {
-        width: 100%;
-        max-width: 480px;
-        background: white;
-        padding: 20px;
-        border-radius: 18px;
-        box-shadow: 0 0 25px rgba(0,0,0,0.15);
-        text-align: center;
-        box-sizing: border-box;
-    }
+#app::before {
+  content: '';
+  position: absolute;
+  top: -50%;
+  left: -50%;
+  width: 200%;
+  height: 200%;
+  background: radial-gradient(circle at 30% 30%, rgba(77,124,255,0.08), transparent 70%);
+  animation: bgMove 25s linear infinite;
+  pointer-events: none;
+  z-index: 0;
+}
 
-    h2 { margin-bottom: 20px; font-size: 1.5rem; color: black; }
+@keyframes bgMove {
+  0% { transform: rotate(0deg) translateX(0) rotate(0deg); }
+  50% { transform: rotate(180deg) translateX(10%) rotate(180deg); }
+  100% { transform: rotate(360deg) translateX(0) rotate(360deg); }
+}
 
-    button {
-        padding: 12px 16px;
-        font-size: 16px;
-        margin: 6px 0;
-        width: 100%;
-        border-radius: 10px;
-        border: none;
-        cursor: pointer;
-        background: #007bff;
-        color: white;
-        box-sizing: border-box;
-    }
-    button:hover { background: #0056b3; }
+/* HEADINGS */
+h2 {
+  font-size: 2.8rem;
+  font-weight: 900;
+  margin-bottom: 50px;
+  color: #111;
+  letter-spacing: -1px;
+  text-align: center;
+  z-index: 1;
+}
 
-    .back {
-        background: #444 !important;
-        margin-top: 12px;
-    }
+/* BUTTONS */
+button {
+  width: 100%;
+  max-width: 420px;
+  padding: 20px 28px;
+  margin-bottom: 20px;
+  border-radius: 20px;
+  font-size: 1.25rem;
+  font-weight: 700;
+  cursor: pointer;
+  color: white;
+  background: linear-gradient(145deg, #4d7cff, #3b5ed1);
+  border: none;
+  box-shadow: 0 12px 35px rgba(0,0,0,0.18), 0 4px 8px rgba(0,0,0,0.06) inset;
+  transition: all 0.35s ease;
+  position: relative;
+  z-index: 1;
+}
+button:hover {
+  transform: translateY(-5px) scale(1.03);
+  box-shadow: 0 16px 50px rgba(0,0,0,0.22), 0 6px 12px rgba(0,0,0,0.08) inset;
+}
+button:active {
+  transform: scale(0.97);
+}
+.back {
+  background: #444 !important;
+}
 
-    .word { font-size: 1.5rem; font-weight: bold; margin-bottom: 10px; word-wrap: break-word; color: black;}
-    .translation { font-size: 1.2rem; margin: 10px 0; color: #333; word-wrap: break-word; }
-    .option { background: #ddd; color: black; }
-    .correct { background: #4caf50 !important; color: white !important; }
-    .wrong { background: #f44336 !important; color: white !important; }
+/* WORD & TRANSLATION CARDS */
+.word, .translation, .example {
+  background: rgba(255,255,255,0.72);
+  backdrop-filter: blur(16px);
+  padding: 28px 24px;
+  border-radius: 24px;
+  margin-bottom: 28px;
+  width: 100%;
+  max-width: 540px;
+  box-shadow: 0 12px 35px rgba(0,0,0,0.15), 0 4px 12px rgba(0,0,0,0.05) inset;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  z-index: 1;
+}
+.word { font-size: 2.2rem; font-weight: 900; color: #111; }
+.translation { font-size: 1.6rem; color: #333; }
+.example { font-size: 1.15rem; color: #555; font-style: italic; }
 
-    .small { font-size: 0.9rem; color: #666; margin-bottom: 10px; }
-    .example { margin-top: 10px; color: #444; font-style: italic; word-wrap: break-word; }
+/* MULTIPLE CHOICE OPTIONS */
+.option {
+  background: rgba(255,255,255,0.75);
+  padding: 20px;
+  margin-bottom: 20px;
+  border-radius: 20px;
+  cursor: pointer;
+  font-size: 1.25rem;
+  font-weight: 600;
+  backdrop-filter: blur(14px);
+  box-shadow: 0 8px 30px rgba(0,0,0,0.12), 0 3px 8px rgba(0,0,0,0.05) inset;
+  transition: all 0.35s ease;
+}
+.option:hover {
+  transform: translateY(-4px) scale(1.03);
+  background: rgba(255,255,255,0.88);
+}
+.correct { background: #35c46a !important; color: white !important; transform: scale(1.04); }
+.wrong { background: #e63946 !important; color: white !important; }
 
-    .char-btn {
-        width: 45px;
-        padding: 8px 0;
-        margin: 2px 3px 8px 3px;
-        font-size: 16px;
-        box-sizing: border-box;
-    }
+/* INPUTS */
+input[type="text"] {
+  width: 100%;
+  max-width: 540px;
+  padding: 18px;
+  margin-bottom: 20px;
+  font-size: 1.2rem;
+  border-radius: 20px;
+  border: 2px solid #ccc;
+  transition: 0.3s ease;
+}
+input[type="text"]:focus {
+  border-color: #4d7cff;
+  box-shadow: 0 0 0 6px rgba(77,124,255,0.2);
+}
 
-    input[type="text"] {
-        padding: 10px;
-        width: 100%;
-        font-size: 16px;
-        box-sizing: border-box;
-        margin-bottom: 10px;
-    }
+/* INTELLIGENT BOX MODAL */
+#intelligentBoxOverlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.7);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 4000;
+  animation: fadeIn 0.35s ease;
+}
 
-    #intelligentBoxOverlay {
-        position: fixed;
-        top: 0;
-        left: 0;
-        width: 100vw;
-        height: 100vh;
-        background: rgba(0,0,0,0.5);
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        z-index: 1000;
-        padding: 10px;
-        box-sizing: border-box;
-    }
+#intelligentBox {
+  background: rgba(255,255,255,0.88);
+  padding: 60px 40px;
+  max-width: 580px;
+  width: 90%;
+  border-radius: 30px;
+  text-align: center;
+  box-shadow: 0 16px 50px rgba(0,0,0,0.25);
+  backdrop-filter: blur(20px);
+  animation: popup 0.3s ease;
+}
+#intelligentBox .word { font-size: 2.3rem; font-weight: 900; margin-bottom: 16px; }
+#intelligentBox .translation { font-size: 1.7rem; color: #333; margin-bottom: 20px; }
+#intelligentBox .additionalInfo { font-size: 1.2rem; color: #555; font-style: italic; }
 
-    #intelligentBox {
-        background: white;
-        padding: 20px 25px;
-        border-radius: 15px;
-        max-width: 400px;
-        width: 100%;
-        box-shadow: 0 0 20px rgba(0,0,0,0.3);
-        text-align: center;
-        font-family: Arial, sans-serif;
-    }
-    #intelligentBox .word { font-size: 1.5rem; margin-bottom: 8px; }
-    #intelligentBox .translation { font-size: 1.2rem; color: #333; margin-bottom: 15px; }
-    #intelligentBox .additionalInfo { font-size: 1rem; color: #555; font-style: italic; }
+/* ANIMATIONS */
+@keyframes popup {
+  from { opacity: 0; transform: translateY(40px) scale(0.88); }
+  to { opacity: 1; transform: translateY(0) scale(1); }
+}
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
 
-    @media (max-width: 480px) {
-        #app {
-            transform: scale(1.05);
-            transform-origin: top center;
-        }
-    }
+/* MODE SPECIFIC SPACING */
+#app.learning-mode .word, #app.learning-mode .translation { margin-bottom: 36px; }
+#app.quiz-mode .option { margin-bottom: 28px; }
+#app.test-mode input[type="text"] { margin-bottom: 28px; }
+#app.intelligent-mode .word, #app.intelligent-mode .translation { margin-bottom: 40px; }
+
+/* RESPONSIVE */
+@media (max-width: 900px) {
+  #app { padding: 60px 40px; }
+  h2 { font-size: 2.2rem; }
+  button { font-size: 1.1rem; padding: 18px 24px; }
+  .word { font-size: 2rem; }
+  .translation { font-size: 1.4rem; }
+  .example { font-size: 1.1rem; }
+  input[type="text"] { font-size: 1.1rem; padding: 16px; }
+}
+@media (max-width: 500px) {
+  #app { padding: 35px 25px; }
+  h2 { font-size: 1.8rem; }
+  button { font-size: 1rem; padding: 14px 20px; }
+  .word { font-size: 1.6rem; }
+  .translation { font-size: 1.2rem; }
+  .example { font-size: 1rem; }
+  input[type="text"] { font-size: 1rem; padding: 14px; }
+}
