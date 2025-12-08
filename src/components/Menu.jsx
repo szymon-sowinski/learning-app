@@ -28,7 +28,8 @@ export default function Menu({ setMode, randomWord }) {
 
   return (
     <div id="app">
-      <h2>MENU GŁÓWNE</h2>
+      <h2 class="appHeading">Wordfly</h2>
+      <h3>Menu główne</h3>
       <button onClick={startLearning}>📘 Nauka</button>
       <button onClick={startQuiz}>🧩 Quiz – 4 opcje</button>
       <button onClick={startTest}>✍ Test – wpisywanie</button>
