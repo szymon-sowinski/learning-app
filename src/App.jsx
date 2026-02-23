@@ -22,7 +22,7 @@ function AppInner() {
   const [currentWord, setCurrentWord] = useState(null);
   const [difficult, setDifficult] = useState([]);
   const [showIntelligent, setShowIntelligent] = useState(null);
-  const [groupId, setGroupId] = useState(1);
+  const [groupId, setGroupId] = useState(3);
 
   const { data: collections } = useQuery({
     queryKey: ["collections"],
@@ -77,12 +77,10 @@ function AppInner() {
               )}
               {mode === "test" && (
                 <Test
-                  currentWord={currentWord}
-                  setCurrentWord={setCurrentWord}
-                  randomWord={randomWord}
                   setMode={setMode}
                   showIntelligent={showIntelligent}
                   setShowIntelligent={setShowIntelligent}
+                  words={words}
                 />
               )}
               {mode === "difficult" && (
