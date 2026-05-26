@@ -2,13 +2,13 @@ import axios from "axios";
 
 export const fetchCollections = async () => {
     //const res = await axios.get("https://fiszki-api.tenco.waw.pl/collections");
-    const res = await axios.get("http://localhost:2137/grupy");
+    const res = await axios.get("https://fiszki-api.tenco.waw.pl/grupy");
     console.log(res.data)
     return res.data;
 };
 
 export const fetchWords = async (groupId, subgroupId) => {
-    const res = await axios.get("http://localhost:2137/fiszki", {
+    const res = await axios.get("https://fiszki-api.tenco.waw.pl/fiszki", {
         params: {
             groupId,
             subgroupId
@@ -19,7 +19,7 @@ export const fetchWords = async (groupId, subgroupId) => {
 };
 
 export const fetchSubgroups = async () => {
-    const res = await axios.get("http://localhost:2137/podgrupy");
+    const res = await axios.get("https://fiszki-api.tenco.waw.pl/podgrupy");
     return res.data;
 };
 
