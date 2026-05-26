@@ -50,7 +50,7 @@ const MainPage = () => {
     });
 
     const mappedWords = useMemo(
-        () => words.map(w => [w.pl, w.de]),
+        () => words.map(w => [w.pl, w.de, w.id]),
         [words]
     );
 
@@ -75,12 +75,8 @@ const MainPage = () => {
 
             {mode === "learning" && (
                 <Learning
-                    currentWord={currentWord}
-                    setCurrentWord={setCurrentWord}
-                    randomWord={randomWord}
                     setMode={setMode}
-                    difficult={difficult}
-                    setDifficult={setDifficult}
+                    words={mappedWords}
                 />
             )}
 

@@ -69,6 +69,10 @@ export default function Test({ setMode, words }) {
     <div id="app">
       <h2>✍ Test</h2>
 
+      <div style={{ margin: '10px', fontSize: '0.85em', color: '#555' }}>
+        fiszka#{currentWord[2]}
+      </div>
+
       {currentWord.length > 0 && <div className="word">{currentWord[0]}</div>}
 
       <div style={{ display: 'flex', justifyContent: 'center', marginBottom: '10px', gap: '5px' }}>
