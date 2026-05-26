@@ -1,4 +1,23 @@
-export default function Menu({ setMode, randomWord }) {
+import { useNavigate, useLocation } from "react-router-dom";
+
+export default function Menu({ setMode, randomWord, collections }) {
+
+  const location = useLocation()
+
+  const navigate = useNavigate();
+  const setGroupId = (id) => {
+    navigate(`?set=${id}`)
+  }
+
+  function getId() {
+    const res = new URLSearchParams(location.search);
+    const id = res.get("set")
+    console.log(id)
+    return id ? parseInt(id) : 1
+  }
+
+
+  console.log(collections)
   const startLearning = () => {
     randomWord();
     setMode("learning");
@@ -29,6 +48,13 @@ export default function Menu({ setMode, randomWord }) {
   return (
     <div id="app">
       <h2 class="appHeading">Wordfly</h2>
+      <select onChange={(e) => setGroupId(e.target.value)} value={getId()}>
+        {collections?.map((el) => (
+          <option key={el.id} value={el.id}>
+            {el.name}
+          </option>
+        ))}
+      </select>
       <h3>Menu główne</h3>
       <button onClick={startLearning}>📘 Nauka</button>
       <button onClick={startQuiz}>🧩 Quiz – 4 opcje</button>
