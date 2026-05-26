@@ -1,29 +1,33 @@
 import { useState } from "react";
 
-export default function Learning({ currentWord, setCurrentWord, randomWord, setMode, difficult, setDifficult }) {
+export default function Learning({ setMode, words }) {
   const [showPopup, setShowPopup] = useState(false);
+  const [pos, setPos] = useState(0)
+  const wordsLen = words.length;
 
   const nextWord = () => randomWord();
 
   const markDifficult = () => {
-  const pair = [currentWord[0], currentWord[1]];
-  if (!difficult.some(d => d[0] === currentWord[0])) {
-    setDifficult([...difficult, pair]);
-    setShowPopup("added");
-  } else {
-    setShowPopup("exists");
-  }
-  setTimeout(() => setShowPopup(false), 1000);
-};
+    const pair = [currentWord[0], currentWord[1]];
+    if (!difficult.some(d => d[0] === currentWord[0])) {
+      setDifficult([...difficult, pair]);
+      setShowPopup("added");
+    } else {
+      setShowPopup("exists");
+    }
+    setTimeout(() => setShowPopup(false), 1000);
+  };
 
   return (
     <div id="app" style={{ position: "relative" }}>
       <h2>📘 Nauka</h2>
-      <div className="word">{currentWord[0]}</div>
+      <div className="small">{pos + 1} / {wordsLen}</div>
+      <div className="word">{words[pos][0]}</div>
       <div className="small">Tłumaczenie:</div>
-      <div className="translation">{currentWord[1]}</div>
-      <button onClick={nextWord}>Następne słówko</button>
+      <div className="translation">{words[pos][1]}</div>
+      <button onClick={() => setPos(pos + 1 >= wordsLen ? 0 : pos + 1)}>Następne słówko</button>
       <button onClick={markDifficult}>Dodaj do trudnych</button>
+
       <button className="back" onClick={() => setMode("menu")}>⏪ Menu</button>
 
       {showPopup && (
