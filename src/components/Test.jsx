@@ -86,16 +86,12 @@ export default function Test({ setMode, words }) {
         placeholder="Wpisz tłumaczenie"
       />
 
-      <div style={{ marginTop: '10px', fontSize: '0.85em', color: '#555' }}>
-        Pozostało słów: {remainingWords.length}
+      <div style={{ margin: '10px', fontSize: '0.85em', color: '#555' }}>
+        Pozostało słów: {remainingWords.length} / {words.length}
       </div>
 
       <button onClick={handleSubmit}>Sprawdź</button>
       <button className="back" onClick={() => setMode("menu")}>⏪ Menu</button>
-      <p style={{ color: "black" }}>
-        {
-          Object.entries(correctCounts).map(entry => (<>{entry[0]} : {entry[1]}<br /></>))
-        }</p>
     </div>
   );
 }
