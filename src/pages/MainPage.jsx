@@ -1,4 +1,7 @@
-import { useEffect, useState } from "react";
+import { useState, useMemo } from "react";
+import { useQuery } from "@tanstack/react-query";
+import { useLocation } from "react-router-dom";
+
 import Menu from "../components/Menu";
 import PopQuiz from "../components/PopQuiz";
 import Learning from "../components/Learning";
@@ -6,55 +9,70 @@ import Quiz from "../components/Quiz";
 import Test from "../components/Test";
 import Difficult from "../components/Difficult";
 import IntelligentLearning from "../components/IntelligentLearning";
-import { fetchCollections, fetchWords } from "../service/fetchFunctions"
-import { QueryClient, QueryClientProvider, useQuery } from "@tanstack/react-query";
-import { useLocation } from "react-router-dom";
+
+import { fetchCollections, fetchWords, fetchSubgroups } from "../service/fetchFunctions";
+
 const MainPage = () => {
     const [mode, setMode] = useState("menu");
     const [currentWord, setCurrentWord] = useState(null);
     const [difficult, setDifficult] = useState([]);
     const [showIntelligent, setShowIntelligent] = useState(null);
-    const [groupId, setGroupId] = useState(3);
 
-    const location = useLocation()
+    const location = useLocation();
 
-    const { data: collections } = useQuery({
+    const params = useMemo(() => {
+        const p = new URLSearchParams(location.search);
+        return {
+            groupId: parseInt(p.get("set")) || 1,
+            subgroupId: Number(p.get("sub") ?? 0)
+        };
+    }, [location.search]);
+
+    const { groupId, subgroupId } = params;
+
+    const { data: collections = [] } = useQuery({
         queryKey: ["collections"],
         queryFn: fetchCollections,
         staleTime: 1000 * 60 * 5
     });
 
-    const { data: words1 = [] } = useQuery({
-        queryKey: ["words", groupId],
-        queryFn: () => fetchWords(groupId),
+    const { data: subgroups = [] } = useQuery({
+        queryKey: ["subgroups"],
+        queryFn: fetchSubgroups,
+        staleTime: 1000 * 60 * 5
+    });
+
+    const { data: words = [] } = useQuery({
+        queryKey: ["words", groupId, subgroupId],
+        queryFn: () => fetchWords(groupId, subgroupId),
         enabled: !!groupId,
         staleTime: 1000 * 60 * 5
     });
 
-    function getId() {
-        const res = new URLSearchParams(location.search);
-        const id = res.get("set")
-        id ? setGroupId(parseInt(id)) : ""
-    }
+    const mappedWords = useMemo(
+        () => words.map(w => [w.pl, w.de]),
+        [words]
+    );
 
-
-    const words = words1.map(item => [item.pl, item.de])
-
-    const randomWord = (list = words) => {
+    const randomWord = (list = mappedWords) => {
         if (!list.length) return null;
         const idx = Math.floor(Math.random() * list.length);
-        setCurrentWord(list[idx]);
-        return list[idx];
+        const word = list[idx];
+        setCurrentWord(word);
+        return word;
     };
-
-    useEffect(() => {
-        getId()
-    }, [groupId])
-
 
     return (
         <>
-            {mode === "menu" && <Menu setMode={setMode} randomWord={randomWord} collections={collections} setGroupId={setGroupId} />}
+            {mode === "menu" && (
+                <Menu
+                    setMode={setMode}
+                    randomWord={randomWord}
+                    collections={collections}
+                    subgroups={subgroups}
+                />
+            )}
+
             {mode === "learning" && (
                 <Learning
                     currentWord={currentWord}
@@ -65,6 +83,7 @@ const MainPage = () => {
                     setDifficult={setDifficult}
                 />
             )}
+
             {mode === "quiz" && (
                 <Quiz
                     currentWord={currentWord}
@@ -73,17 +92,19 @@ const MainPage = () => {
                     setMode={setMode}
                     showIntelligent={showIntelligent}
                     setShowIntelligent={setShowIntelligent}
-                    words={words}
+                    words={mappedWords}
                 />
             )}
+
             {mode === "test" && (
                 <Test
                     setMode={setMode}
                     showIntelligent={showIntelligent}
                     setShowIntelligent={setShowIntelligent}
-                    words={words}
+                    words={mappedWords}
                 />
             )}
+
             {mode === "difficult" && (
                 <Difficult
                     currentWord={currentWord}
@@ -94,12 +115,10 @@ const MainPage = () => {
                     randomWord={randomWord}
                 />
             )}
-            {mode === "intelligent" && <IntelligentLearning setMode={setMode} words={words} />}
-            {mode === "popQuiz" && <PopQuiz setMode={setMode} words={words} />}
-
-
+            {mode === "intelligent" && <IntelligentLearning setMode={setMode} words={mappedWords} />}
+            {mode === "popQuiz" && <PopQuiz setMode={setMode} words={mappedWords} />}
         </>
-    )
-}
+    );
+};
 
 export default MainPage;
