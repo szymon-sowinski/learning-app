@@ -1,19 +1,23 @@
+import { useState } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 
 export default function Menu({ setMode, randomWord, collections }) {
+
+  const [setNr, setSet] = useState(1)
 
   const location = useLocation()
 
   const navigate = useNavigate();
   const setGroupId = (id) => {
     navigate(`?set=${id}`)
+    setLocalStorage(id)
   }
 
   function getId() {
     const res = new URLSearchParams(location.search);
     const id = res.get("set")
     console.log(id)
-    return id ? parseInt(id) : 1
+    return id ? parseInt(id) : getLocalStorage()
   }
 
 
@@ -43,6 +47,14 @@ export default function Menu({ setMode, randomWord, collections }) {
 
   const startPopQuiz = () => {
     setMode("popQuiz");
+  }
+
+  const setLocalStorage = (setNr) => {
+    localStorage.setItem("set", setNr)
+  }
+
+  const getLocalStorage = () => {
+    return localStorage.getItem("set")
   }
 
   return (
