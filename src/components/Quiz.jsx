@@ -1,9 +1,18 @@
 import { useState, useEffect } from "react";
 
-export default function Quiz({ currentWord, setCurrentWord, randomWord, setMode, showIntelligent, setShowIntelligent, words }) {
+export default function Quiz({ setMode, words }) {
+
+  const randomWord = () => {
+    return words[Math.floor(Math.random() * words.length)]
+  }
+
   const [options, setOptions] = useState([]);
   const [selectedAnswer, setSelectedAnswer] = useState(null);
-  const [correctAnswer, setCorrectAnswer] = useState(null); 
+  const [correctAnswer, setCorrectAnswer] = useState(null);
+  const [currentWord, setCurrentWord] = useState(randomWord())
+
+
+
 
   const generateOptions = (word) => {
     const temp = [word[1]];
@@ -25,10 +34,6 @@ export default function Quiz({ currentWord, setCurrentWord, randomWord, setMode,
     setSelectedAnswer(answer);
     setCorrectAnswer(currentWord[1]);
 
-    if (answer !== currentWord[1]) {
-      setShowIntelligent(currentWord);
-    }
-
     setTimeout(() => {
       const newWord = randomWord();
       setCurrentWord(newWord);
@@ -46,16 +51,23 @@ export default function Quiz({ currentWord, setCurrentWord, randomWord, setMode,
       <div className="word">{currentWord[0]}</div>
       {options.map((opt, idx) => {
         let bgColor = "";
+
         if (selectedAnswer) {
-          if (opt === correctAnswer) bgColor = "green";
-          else if (opt === selectedAnswer && opt !== correctAnswer) bgColor = "red";
+          if (opt === correctAnswer) {
+            bgColor = "green";
+          } else if (opt === selectedAnswer) {
+            bgColor = "red";
+          }
         }
 
         return (
           <button
             key={idx}
             onClick={() => !selectedAnswer && handleAnswer(opt)}
-            style={{ backgroundColor: bgColor, color: bgColor ? "white" : "black" }}
+            style={{
+              background: bgColor,
+              color: bgColor ? "white" : "black"
+            }}
           >
             {opt}
           </button>
